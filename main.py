@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import connection
 from bson import ObjectId
 from schematics.models import Model
+import pymongo
 
 from database import db
 
@@ -19,9 +20,16 @@ async def say_hello(name: str):
 
 
 @app.get("/test")
-async def list_students():
-    database = db['sample_airbnb']
-    collections = database.list_collection_names()
-    return collections
+async def list_users():
+    database = db['plan-it_travel']
+    col = database['users']
+
+    user_list = []
+    for x in col.find({}, {}):
+        user_list.append(x)
+
+    print(user_list)
+
+    return "Success"
 
 
