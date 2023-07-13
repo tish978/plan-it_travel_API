@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 import connection
 from bson import ObjectId
 from schematics.models import Model
 import pymongo
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
 from database import db
@@ -14,12 +14,12 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return FileResponse("templates/login.html")
 
 
-@app.get("/hello/{name}")
+@app.get("/hello")
 async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+    return {"message": f"Hello Satish"}
 
 
 @app.get("/sign-up", response_class=HTMLResponse)
@@ -45,11 +45,13 @@ async def handle_sign_up(request: Request):
 
 
 @app.post("/login")
-def login(username: str, password: str):
+def login(username: str = Form(...), password: str = Form(...)):
     collection = database['users']
 
     existing_user = collection.find_one({"username": username, "password": password})
     if existing_user:
-        return {"message": "Successful login!"}
+        print({"message": "Successful login!"})
+        return HTMLResponse(content="Login successful")
     else:
-        return{"message": "ERROR: Username or Password is not correct."}
+        print({"message": "ERROR: Username or Password is not correct."})
+        return HTMLResponse(content="Invalid username or password", status_code=401)
