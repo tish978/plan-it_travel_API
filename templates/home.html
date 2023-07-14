@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script>
+        function signOut() {
+            window.location.href = '/my_endpoint';
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+
+        #dashboard {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+
+        #dashboard .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        #dashboard:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+        #content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>Dashboard</h1>
+    </div>
+    <div id="dashboard">
+        <button class="dropdown-button">Menu ▼</button>
+        <div class="dropdown-content">
+            <button>Button 1</button>
+            <button>Button 2</button>
+            <button>Button 3</button>
+            <button onclick="signOut()">Sign Out</button>
+        </div>
+    </div>
+    <div id="content">
+        <h2>Welcome</h2>
+        <p>This is your custom dashboard. You can add buttons, widgets, charts, and other components here to monitor and control your application.</p>
+    </div>
+</body>
+</html>

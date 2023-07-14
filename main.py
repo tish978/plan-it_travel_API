@@ -3,7 +3,7 @@ import connection
 from bson import ObjectId
 from schematics.models import Model
 import pymongo
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from database import db
@@ -16,16 +16,20 @@ templates = Jinja2Templates(directory="templates")
 async def root():
     return FileResponse("templates/login.html")
 
-
-@app.get("/hello")
-async def say_hello(name: str):
-    return {"message": f"Hello Satish"}
-
+@app.post("/home")
+def home():
+    #return HTMLResponse(content="Welcome to the Home page!")
+    return FileResponse("templates/home.html")
 
 @app.get("/sign-up", response_class=HTMLResponse)
 async def sign_up(request: Request):
     return templates.TemplateResponse("sign-up.html", {"request": request})
 
+
+
+@app.get("/my_endpoint")
+def my_endpoint():
+    return {"message": "Sign-out successful"}
 
 @app.post("/sign-up")
 async def handle_sign_up(request: Request):
@@ -45,13 +49,13 @@ async def handle_sign_up(request: Request):
 
 
 @app.post("/login")
-def login(username: str = Form(...), password: str = Form(...)):
+def login(request: Request, username: str = Form(...), password: str = Form(...)):
     collection = database['users']
 
     existing_user = collection.find_one({"username": username, "password": password})
     if existing_user:
         print({"message": "Successful login!"})
-        return HTMLResponse(content="Login successful")
+        return RedirectResponse(url="/home")
     else:
         print({"message": "ERROR: Username or Password is not correct."})
         return HTMLResponse(content="Invalid username or password", status_code=401)
