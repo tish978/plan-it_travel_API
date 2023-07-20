@@ -3,16 +3,18 @@
 <head>
     <title>Login Page</title>
 </head>
-<body>
-    <h2>Login</h2>
-    <form method="POST" action="/login">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br><br>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+    <div style="background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 300px;">
+        <h2 style="text-align: center;">Login</h2>
+        <form method="POST" action="/login" style="display: flex; flex-direction: column;">
+            <label for="username" style="margin-bottom: 10px;">Username:</label>
+            <input type="text" id="username" name="username" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
+            <label for="password" style="margin-bottom: 10px;">Password:</label>
+            <input type="password" id="password" name="password" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" required>
 
-        <input type="submit" value="Login">
-    </form>
+            <input type="submit" value="Login" style="padding: 10px 20px; background-color: #4caf50; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+        </form>
+    </div>
 </body>
 </html>
