@@ -1,19 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Login Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .input {
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .login-button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-    <div style="background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 300px;">
-        <h2 style="text-align: center;">Login</h2>
-        <form method="POST" action="/login" style="display: flex; flex-direction: column;">
-            <label for="username" style="margin-bottom: 10px;">Username:</label>
-            <input type="text" id="username" name="username" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" required>
+<body>
+    <div class="login-container">
+        <h2 class="login-title">Login</h2>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username" class="label">Username:</label>
+                <input type="text" id="username" name="username" class="input" required>
+            </div>
 
-            <label for="password" style="margin-bottom: 10px;">Password:</label>
-            <input type="password" id="password" name="password" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" required>
+            <div class="form-group">
+                <label for="password" class="label">Password:</label>
+                <input type="password" id="password" name="password" class="input" required>
+            </div>
 
-            <input type="submit" value="Login" style="padding: 10px 20px; background-color: #4caf50; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+            <input type="submit" value="Login" class="login-button">
         </form>
     </div>
 </body>
