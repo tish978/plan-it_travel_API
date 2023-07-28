@@ -11,6 +11,10 @@
         function signOut() {
             window.location.href = '/';
         }
+
+        function planTrip(){
+            window.location.href = '/plan-trip';
+        }
     </script>
     <style>
         body {
@@ -71,12 +75,29 @@
         #content {
             padding: 20px;
         }
+
+        /* Custom styles for the navbar */
+        .navbar-custom {
+            background-image: linear-gradient(to right, #4a148c, #000000);
+        }
+
+        .navbar-custom .navbar-brand {
+            color: #fff;
+        }
+
+        .navbar-custom .nav-link {
+            color: #fff;
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
      <!-- Bootstrap Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Dashboard</a>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Welcome!</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -93,6 +114,7 @@
                     <a class="nav-link" href="#">Contact</a>
                 </li>
                 <li class="nav-item">
+                    <!-- Add onclick attribute to call signOut() function -->
                     <a class="nav-link" onclick="signOut()">Sign Out</a>
                 </li>
             </ul>
@@ -107,7 +129,7 @@
     <div id="dashboard">
         <button class="dropdown-button">Menu ▼</button>
         <div class="dropdown-content">
-            <button>Button 1</button>
+            <button onclick="planTrip()">Plan Trip</button>
             <button>Button 2</button>
             <button>Button 3</button>
             <button onclick="signOut()">Sign Out</button>

@@ -22,6 +22,10 @@ templates = Jinja2Templates(directory="templates")
 async def root():
     return FileResponse("templates/login.html")
 
+@app.get("/plan-trip")
+async def root():
+    return FileResponse("templates/plan-trip.html")
+
 @app.post("/home")
 def home():
     #return HTMLResponse(content="Welcome to the Home page!")
