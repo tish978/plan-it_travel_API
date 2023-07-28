@@ -5,10 +5,16 @@ from schematics.models import Model
 import pymongo
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from starlette.staticfiles import StaticFiles
+
 
 from database import db
 
 app = FastAPI()
+
+# Mount the "static" directory as "/static" for serving static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 database = db['plan-it_travel']
 templates = Jinja2Templates(directory="templates")
 

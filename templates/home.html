@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>Dashboard</title>
+
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
     <script>
         function signOut() {
             window.location.href = '/';
@@ -69,6 +74,33 @@
     </style>
 </head>
 <body>
+     <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- You can add more navbar links here -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="signOut()">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+
     <div id="header">
         <h1>Dashboard</h1>
     </div>
@@ -81,9 +113,15 @@
             <button onclick="signOut()">Sign Out</button>
         </div>
     </div>
+
+
     <div id="content">
         <h2>Welcome</h2>
         <p>This is your custom dashboard. You can add buttons, widgets, charts, and other components here to monitor and control your application.</p>
     </div>
+
+    <!-- Add Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
