@@ -30,6 +30,11 @@ async def root():
 def plan_trip_p2():
     return FileResponse("templates/plan-trip-p2.html")
 
+@app.get('/plan-trip-p3')
+def plan_trip_p3():
+    return FileResponse("templates/plan-trip-p3.html")
+
+
 @app.post("/home")
 def home():
     #return HTMLResponse(content="Welcome to the Home page!")
