@@ -1,11 +1,8 @@
-from fastapi import FastAPI, Request, Form
-import connection
-from bson import ObjectId
-from schematics.models import Model
-import pymongo
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi import FastAPI, Request, Form, HTTPException
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from starlette.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles
+from bson import json_util
 
 
 from database import db
@@ -22,9 +19,40 @@ templates = Jinja2Templates(directory="templates")
 async def root():
     return FileResponse("templates/login.html")
 
-@app.get("/plan-trip")
-async def root():
-    return FileResponse("templates/plan-trip.html")
+@app.get("/plan-trip", response_class=HTMLResponse)
+async def plan_trip(request: Request):
+    return templates.TemplateResponse("plan-trip.html", {"request": request})
+
+@app.post("/query", response_class=JSONResponse)
+async def query_destinations(q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
+
+    collection = database['destinations']
+    # Debugging: Log form input values
+    print("q1:", q1)
+    print("q2:", q2)
+    print("q3:", q3)
+
+    # Convert q2 to a list of integers
+    q2_int = [int(value) for value in q2]
+
+    # Build the MongoDB query based on the form input
+    query = {
+        "continent": {"$in": q1},
+        "weather": {"$in": q2_int},
+        "language": {"$in": q3},
+    }
+
+    # Debugging: Log constructed query
+    print("Query:", query)
+
+    # Perform the query
+    try:
+        results = list(collection.find(query))
+        new_results = json_util.dumps(results)
+        print(new_results)
+        return {"results": new_results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error querying the database")
 
 @app.get("/plan-trip-p2")
 def plan_trip_p2():

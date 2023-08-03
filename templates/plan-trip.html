@@ -9,99 +9,101 @@
         function nextPage(){
             window.location.href = '/plan-trip-p2';
         }
+         // Function to submit the form
     </script>
 </head>
 <body class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="container">
         <h2>Travel Survey</h2>
-        <form>
+        <form action="/query" method="post">
             <!-- Question 1 -->
             What continent are you considering traveling to? [Select all that apply]
             <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option1" value="option1">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option1" value="Asia">
                 <label class="form-check-label" for="q1-option1">Asia</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option2" value="option2">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option2" value="North America">
                 <label class="form-check-label" for="q1-option2">North America</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option3" value="option3">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option3" value="Antarctica">
                 <label class="form-check-label" for="q1-option3">Antarctica</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option4" value="option4">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option4" value="Africa">
                 <label class="form-check-label" for="q1-option4">Africa</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option5" value="option5">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option5" value="Europe">
                 <label class="form-check-label" for="q1-option5">Europe</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option6" value="option6">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option6" value="Australia">
                 <label class="form-check-label" for="q1-option4">Australia</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option7" value="option7">
+                <input class="form-check-input" type="checkbox" name="q1" id="q1-option7" value="South America">
                 <label class="form-check-label" for="q1-option5">South America</label>
             </div>
 
             <!-- Question 2 -->
-            What weather range are you looking for during your time? [in Degrees F]
+            What weather average are you looking for during your time? [in Degrees F]
             <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option1" value="option1">
-                <label class="form-check-label" for="q2-option1">Below 0</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option1" value="83">
+                <label class="form-check-label" for="q2-option1">83</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option2" value="option2">
-                <label class="form-check-label" for="q2-option2">0-25</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option2" value="25">
+                <label class="form-check-label" for="q2-option2">25</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option3" value="option3">
-                <label class="form-check-label" for="q2-option3">25-50</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option3" value="50">
+                <label class="form-check-label" for="q2-option3">50</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option4" value="option4">
-                <label class="form-check-label" for="q2-option4">50-75</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option4" value="75">
+                <label class="form-check-label" for="q2-option4">75</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option5" value="option5">
-                <label class="form-check-label" for="q2-option5">75-100</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option5" value="100">
+                <label class="form-check-label" for="q2-option5">100</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option6" value="option6">
-                <label class="form-check-label" for="q2-option6">Over 100</label>
+                <input class="form-check-input" type="checkbox" name="q2" id="q2-option6" value="105">
+                <label class="form-check-label" for="q2-option6">105</label>
             </div>
 
             <!-- Question 3 -->
             What language(s) are you comfortable speaking during your trip?
             <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option1" value="option1">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option1" value="English">
                 <label class="form-check-label" for="q3-option1">English</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option2" value="option2">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option2" value="Spanish">
                 <label class="form-check-label" for="q3-option2">Spanish</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option3" value="option3">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option3" value="French">
                 <label class="form-check-label" for="q3-option3">French</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option4" value="option4">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option4" value="Japanese">
                 <label class="form-check-label" for="q3-option4">Japanese</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option5" value="option5">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option5" value="Mandarin">
                 <label class="form-check-label" for="q3-option5">Mandarin</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option6" value="option6">
+                <input class="form-check-input" type="checkbox" name="q3" id="q3-option6" value="Hindi">
                 <label class="form-check-label" for="q3-option6">Hindi</label>
             </div>
 
-            <button type="button" class="btn btn-primary" onclick="nextPage()">Continue</button>
+            <button type="submit" class="btn btn-primary">Continue</button>
         </form>
+    </div>
 
     <!-- Add Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
