@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSON
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from bson import json_util
+import json
 
 
 from database import db
@@ -23,8 +24,8 @@ async def root():
 async def plan_trip(request: Request):
     return templates.TemplateResponse("plan-trip.html", {"request": request})
 
-@app.post("/query", response_class=JSONResponse)
-async def query_destinations(q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
+@app.post("/query", response_class=HTMLResponse)
+async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
 
     collection = database['destinations']
     # Debugging: Log form input values
@@ -48,9 +49,14 @@ async def query_destinations(q1: list = Form(...), q2: list = Form(...), q3: lis
     # Perform the query
     try:
         results = list(collection.find(query))
-        new_results = json_util.dumps(results)
-        print(new_results)
-        return {"results": new_results}
+
+        # Convert and return each individual result as separate JSON responses
+        response_list = []
+        for result in results:
+            stripped_result = json.loads(json_util.dumps(result))
+            response_list.append(stripped_result)
+
+        return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
