@@ -16,6 +16,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 database = db['plan-it_travel']
 templates = Jinja2Templates(directory="templates")
 
+
 @app.get("/")
 async def root():
     return FileResponse("templates/login.html")
@@ -28,6 +29,7 @@ async def plan_trip(request: Request):
 async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
 
     collection = database['destinations']
+    reports_collection = database['reports']
     # Debugging: Log form input values
     print("q1:", q1)
     print("q2:", q2)
@@ -45,6 +47,22 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
 
     # Debugging: Log constructed query
     print("Query:", query)
+
+    try:
+        results = list(collection.find(query))
+
+        location_ids = []  # List to store _ids
+
+        for result in results:
+            _id = result.pop('_id', None)  # Remove the _id field from the result dictionary
+            if _id:
+                location_ids.append(str(_id))  # Convert ObjectId to string and store in the list
+
+        # Create a new entry in the reports collection
+        new_report = {'user_id': curr_userID,'location_ids': location_ids}
+        reports_collection.insert_one(new_report)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error querying the database")
 
     # Perform the query
     try:
@@ -71,7 +89,6 @@ def plan_trip_p3():
 
 @app.post("/home")
 def home():
-    #return HTMLResponse(content="Welcome to the Home page!")
     return FileResponse("templates/home.html")
 
 @app.get("/sign-up", response_class=HTMLResponse)
@@ -107,6 +124,9 @@ def login(request: Request, username: str = Form(...), password: str = Form(...)
 
     existing_user = collection.find_one({"username": username, "password": password})
     if existing_user:
+        global curr_userID
+        curr_userID = existing_user['_id']
+        print(f"The _id value of the curr_userID is: {curr_userID}")
         print({"message": "Successful login!"})
         return RedirectResponse(url="/home")
     else:
