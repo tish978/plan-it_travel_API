@@ -14,7 +14,37 @@
                 Destination {{ loop.index }}
             </div>
             <div class="card-body">
-                <pre>{{ result | tojson(indent=4) }}</pre>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                           <!--- <th>ID</th> -->
+                            <th>Location Name</th>
+                            <th>Country</th>
+                            <th>Continent</th>
+                            <th>Weather</th>
+                            <th>Language</th>
+                            <th>Expensive</th>
+                            <th>Attractions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ result['location_name'] }}</td>
+                            <td>{{ result['country'] }}</td>
+                            <td>{{ result['continent'] }}</td>
+                            <td>{{ result['weather'] }}</td>
+                            <td>{{ result['language'] }}</td>
+                            <td>{{ result['isExpensive'] }}</td>
+                            <td>
+                                <ul>
+                                    {% for attraction in result['attractions'] %}
+                                    <li>{{ attraction }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         {% endfor %}

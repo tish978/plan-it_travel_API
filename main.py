@@ -3,8 +3,7 @@ from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSON
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from bson import json_util
-import json
-
+import json, datetime, pytz
 
 from database import db
 
@@ -16,6 +15,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 database = db['plan-it_travel']
 templates = Jinja2Templates(directory="templates")
 
+pst = pytz.timezone('US/Pacific')
 
 @app.get("/")
 async def root():
@@ -48,23 +48,27 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     # Debugging: Log constructed query
     print("Query:", query)
 
+    # Perform query to create reports collection entry
     try:
         results = list(collection.find(query))
-
         location_ids = []  # List to store _ids
-
         for result in results:
             _id = result.pop('_id', None)  # Remove the _id field from the result dictionary
             if _id:
                 location_ids.append(str(_id))  # Convert ObjectId to string and store in the list
 
         # Create a new entry in the reports collection
-        new_report = {'user_id': curr_userID,'location_ids': location_ids}
+        current_time_pst = datetime.datetime.now(pst)
+        current_time_pst = current_time_pst.strftime('%H:%M:%S')
+        new_report = {'user_id': curr_userID,'location_ids': location_ids, 'timestamp': current_time_pst}
         reports_collection.insert_one(new_report)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
-    # Perform the query
+
+
+
+    # Perform the query for output on page
     try:
         results = list(collection.find(query))
 
@@ -73,7 +77,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         for result in results:
             stripped_result = json.loads(json_util.dumps(result))
             response_list.append(stripped_result)
-
         return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
