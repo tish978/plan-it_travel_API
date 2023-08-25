@@ -66,6 +66,30 @@
         .signup-button:hover {
             background-color: #45a049;
         }
+
+        @keyframes glowing {
+            0% {
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+               box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            }
+            100% {
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .glow-button{
+            background-color: deepskyblue;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .glow-button:hover {
+            animation: glowing 2.5s infinite;
+            background-color: deepskyblue;
+        }
+
     </style>
 </head>
 <body>
@@ -79,11 +103,26 @@
 
             <div class="form-group">
                 <label for="password" class="label">Password:</label>
-                <input type="password" id="password" name="password" class="input" required>
+                <input type="password" id="password" name="password" class="btn btn-success w-100 glow-button" required>
             </div>
 
             <button type="submit" class="signup-button">Sign Up</button>
         </form>
     </div>
+
+    <script>
+        const submitButton = document.getElementById('submitButton');
+
+        submitButton.addEventListener('mouseover', function (){
+           // Add the glow-button class when the button is being hovered over
+           submitButton.classList.add('glow-button');
+        });
+
+        submitButton.addEventListener('mouseout', function (){
+            // Remove the glow-button class when the mouse moves out of the way of button
+            submitButton.classList.remove('glow-button');
+            }
+        );
+    </script>
 </body>
 </html>
