@@ -59,7 +59,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
 
         # Create a new entry in the reports collection
         current_time_pst = datetime.datetime.now(pst)
-        current_time_pst = current_time_pst.strftime('%H:%M:%S')
+        current_time_pst = current_time_pst.strftime('%Y-%m-%d %H:%M:%S')
         new_report = {'user_id': curr_userID,'location_ids': location_ids, 'timestamp': current_time_pst}
         reports_collection.insert_one(new_report)
     except Exception as e:

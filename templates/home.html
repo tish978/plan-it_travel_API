@@ -15,10 +15,38 @@
         }
     </script>
     <style>
+        @keyframes glowing {
+            0% {
+               box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+            }
+            50% {
+               box-shadow: 0 0 30px rgba(128, 0, 128, 1);
+            }
+            100% {
+               box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+            }
+        }
+
+        @keyframes lavaLamp {
+            0%, 100% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, purple, deeppink, rebeccapurple, firebrick);
+            background-size: 300% 300%;
+            animation: lavaLamp 5s infinite;
         }
 
         #header {
@@ -36,9 +64,10 @@
         #dashboard .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
+            color: slategrey;
+            background-color: slategrey;
             min-width: 200px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
             z-index: 1;
         }
 
@@ -58,8 +87,8 @@
         .dropdown-content button {
             display: block;
             width: 100%;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: slategrey;
+            color: white;
             padding: 10px;
             border: none;
             cursor: pointer;
@@ -67,7 +96,8 @@
         }
 
         .dropdown-content button:hover {
-            background-color: #ddd;
+            color: black;
+            background-color: yellow;
         }
 
         #content {
@@ -85,11 +115,27 @@
 
         .navbar-custom .nav-link {
             color: #fff;
+            background-color: rebeccapurple;
+            transition: background-color 0.3s;
         }
 
         .navbar-custom .nav-link:hover {
             color: #e0e0e0;
+            animation: glowing 2.5s infinite;
+            background-color: rebeccapurple;
         }
+
+        .glow-button{
+            background-color: rebeccapurple;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .glow-button:hover {
+            animation: glowing 2.5s infinite;
+            background-color: rebeccapurple;
+        }
+
     </style>
 </head>
 <body>
@@ -143,5 +189,31 @@
     <!-- Add Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const submitButton = document.getElementById('submitButton');
+
+
+        if (submitButton) {
+            submitButton.addEventListener('mouseover', () => {
+                // Add the glow-button class when the button is being hovered over
+                submitButton.classList.add('glow-button');
+            });
+
+            submitButton.addEventListener('mouseout', () => {
+                // Remove the glow-button class when the mouse moves out of the way of the button
+                submitButton.classList.remove('glow-button');
+            });
+        }
+
+        const body = document.body;
+
+        // Update background colors based on mouse position
+        document.addEventListener('mousemove', (event) => {
+            const mouseX = event.clientX / window.innerWidth * 50; // Normalize mouse position
+            const mouseY = event.clientY / window.innerHeight * 50;
+
+            body.style.backgroundImage = `radial-gradient(at ${mouseX}% ${mouseY}%, purple, deeppink, rebeccapurple, firebrick)`;
+        });
+    </script>
 </body>
 </html>
