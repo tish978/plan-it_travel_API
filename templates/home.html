@@ -13,6 +13,10 @@
         function planTrip(){
             window.location.href = '/plan-trip';
         }
+
+        function generateReport(){
+            window.location.href = '/generate-report';
+        }
     </script>
     <style>
         @keyframes glowing {
@@ -174,7 +178,7 @@
         <button class="dropdown-button">Menu ▼</button>
         <div class="dropdown-content">
             <button onclick="planTrip()">Plan Trip</button>
-            <button>Button 2</button>
+            <button onclick="generateReport()">Generate Reports</button>
             <button>Button 3</button>
             <button onclick="signOut()">Sign Out</button>
         </div>

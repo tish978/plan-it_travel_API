@@ -25,6 +25,10 @@ async def root():
 async def plan_trip(request: Request):
     return templates.TemplateResponse("plan-trip.html", {"request": request})
 
+@app.get("/generate-report", response_class=HTMLResponse)
+async def generate_report(request: Request):
+    return templates.TemplateResponse("make-report.html", {"request": request})
+
 @app.post("/query", response_class=HTMLResponse)
 async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
 
@@ -78,6 +82,29 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
             stripped_result = json.loads(json_util.dumps(result))
             response_list.append(stripped_result)
         return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error querying the database")
+
+
+
+@app.post("/make-report")
+async def make_report(request: Request):
+    reports_collection = database['reports']
+
+    query = {
+        "user_id": curr_userID
+    }
+
+    # Debugging: Log constructed query
+    print("Query:", query)
+
+    try:
+        results = list(reports_collection.find(query))
+        response_list = []
+        for result in results:
+            stripped_result = json.loads(json_util.dumps(result))
+            response_list.append(stripped_result)
+        return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
