@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from bson import json_util
+from bson import json_util, ObjectId
 import json, datetime, pytz
 
 from database import db
@@ -90,6 +90,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
 @app.post("/make-report")
 async def make_report(request: Request):
     reports_collection = database['reports']
+    destination_collection = database['destinations']
 
     query = {
         "user_id": curr_userID
@@ -101,12 +102,40 @@ async def make_report(request: Request):
     try:
         results = list(reports_collection.find(query))
         response_list = []
+
         for result in results:
             stripped_result = json.loads(json_util.dumps(result))
+
+            # Extract location_ids from the result
+            location_ids = stripped_result.get("location_ids", [])
+
+            # Retrieve location_name for each location_id
+            locations_info = []
+            location_ids_oid = [ObjectId(location_id) for location_id in location_ids]
+
+            for location_id in location_ids_oid:
+                location_query = {
+                    "_id": location_id
+                }
+
+                print("location_query: ", location_query)
+
+                location_name_results = list(destination_collection.find(location_query))
+                location_name = [result['location_name'] for result in location_name_results]
+
+                location_name_str = ", ".join([str(item) for item in location_name])
+
+                print("location: " + str(location_name_str))
+                locations_info.append(str(location_name_str))
+
+            stripped_result["locations_info"] = locations_info
+            print(stripped_result)
             response_list.append(stripped_result)
+
         return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
+
 
 @app.get("/plan-trip-p2")
 def plan_trip_p2():

@@ -64,20 +64,16 @@
                         <thead>
                             <tr>
                                <!--- <th>ID</th> -->
-                                <th>ID</th>
-                                <th>User ID</th>
-                                <th>Location IDs</th>
+                                <th>Location Name(s)</th>
                                 <th>Timestamp</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ result['_id'] }}</td>
-                                <td>{{ result['user_id'] }}</td>
                                 <td>
                                     <ul>
-                                        {% for location_id in result['location_ids'] %}
-                                        <li>{{ location_id }}</li>
+                                        {% for location in result['locations_info'] %}
+                                        <li> {{ location }}</li>
                                         {% endfor %}
                                     </ul>
                                 </td>
