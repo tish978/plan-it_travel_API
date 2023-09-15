@@ -52,66 +52,89 @@
     </style>
 </head>
 <body>
-        <div class="container">
-            <h2>Here is your report of all your recommended destinations!</h2>
-            {% for result in results %}
-            <div class="card my-3">
-                <div class="card-header">
-                    Destination {{ loop.index }}
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                               <!--- <th>ID</th> -->
-                                <th>Location Name(s)</th>
-                                <th>Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <ul>
-                                        {% for location in result['locations_info'] %}
-                                        <li> {{ location }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                                <td>{{ result['timestamp'] }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% endfor %}
+    <div class="container">
+    <h2>Here is your report of all your recommended destinations!</h2>
+    <div id="resultsContainer" class="card my-3">
+        <div class="card-header">
+            Consolidated Destinations
         </div>
-        <!-- Add Bootstrap JS and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        const submitButton = document.getElementById('submitButton');
+        <div class="card-body">
+            <table class="table table-bordered" id="destinationTable">
+                <thead>
+                <tr>
+                    <th>Location Name(s)</th>
+                    <th>
+                        Timestamp
+                        <button id="sortTimestamp" class="btn btn-link">Sort</button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>
+                        <ul>
+                            {% for location in result['locations_info'] %}
+                            <li> {{ location }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ result['timestamp'] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Add Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    let ascendingOrder = false;
 
-        if (submitButton) {
-            submitButton.addEventListener('mouseover', () => {
-                // Add the glow-button class when the button is being hovered over
-                submitButton.classList.add('glow-button');
-            });
+    // Function to sort the data by timestamp
+    const sortTimestamp = () => {
+        const table = document.getElementById('destinationTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
 
-            submitButton.addEventListener('mouseout', () => {
-                // Remove the glow-button class when the mouse moves out of the way of the button
-                submitButton.classList.remove('glow-button');
-            });
-        }
+        rows.sort((a, b) => {
+            const timestampA = new Date(a.cells[1].textContent);
+            const timestampB = new Date(b.cells[1].textContent);
 
-        const body = document.body;
-
-        // Update background colors based on mouse position
-        document.addEventListener('mousemove', (event) => {
-            const mouseX = event.clientX / window.innerWidth * 50; // Normalize mouse position
-            const mouseY = event.clientY / window.innerHeight * 50;
-
-            body.style.backgroundImage = `radial-gradient(at ${mouseX}% ${mouseY}%, purple, deeppink, rebeccapurple, firebrick)`;
+            if (ascendingOrder) {
+                return timestampA - timestampB;
+            } else {
+                return timestampB - timestampA;
+            }
         });
+
+        // Clear the table body
+        tbody.innerHTML = '';
+
+        // Append the sorted rows back to the table
+        rows.forEach(row => {
+            tbody.appendChild(row);
+        });
+
+        ascendingOrder = !ascendingOrder; // Toggle the sort order
+    };
+
+    const sortTimestampButton = document.getElementById('sortTimestamp');
+    sortTimestampButton.addEventListener('click', sortTimestamp);
+
+
+    const body = document.body;
+
+    // Update background colors based on mouse position
+    document.addEventListener('mousemove', (event) => {
+        const mouseX = event.clientX / window.innerWidth * 50; // Normalize mouse position
+        const mouseY = event.clientY / window.innerHeight * 50;
+
+        body.style.backgroundImage = `radial-gradient(at ${mouseX}% ${mouseY}%, purple, deeppink, rebeccapurple, firebrick)`;
+    });
+
     </script>
 </body>
 </html>

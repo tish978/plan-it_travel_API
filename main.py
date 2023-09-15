@@ -29,6 +29,11 @@ async def plan_trip(request: Request):
 async def generate_report(request: Request):
     return templates.TemplateResponse("make-report.html", {"request": request})
 
+@app.get("/generate-report-2", response_class=HTMLResponse)
+async def generate_report(request: Request):
+    return templates.TemplateResponse("make-report-2.html", {"request": request})
+
+
 @app.post("/query", response_class=HTMLResponse)
 async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
 
@@ -136,6 +141,62 @@ async def make_report(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
+@app.post("/make-report-2")
+async def make_report_2(request: Request):
+    reports_collection = database['reports']
+    destination_collection = database['destinations']
+
+    query = {
+        "user_id": curr_userID
+    }
+
+    # Debugging: Log constructed query
+    print("Query:", query)
+
+    try:
+        results = list(reports_collection.find(query))
+        response_list = []
+
+        for result in results:
+            stripped_result = json.loads(json_util.dumps(result))
+
+            # Extract location_ids from the result
+            location_ids = stripped_result.get("location_ids", [])
+
+            # Retrieve location_name for each location_id
+            locations_info = []
+            location_ids_oid = [ObjectId(location_id) for location_id in location_ids]
+
+            for location_id in location_ids_oid:
+                location_query = {
+                    "_id": location_id
+                }
+
+                print("location_query: ", location_query)
+
+                location_name_results = list(destination_collection.find(location_query))
+                location_name = [result['location_name'] for result in location_name_results]
+
+                location_name_str = ", ".join([str(item) for item in location_name])
+
+                print("location: " + str(location_name_str))
+                locations_info.append(str(location_name_str))
+
+            stripped_result["locations_info"] = locations_info
+            print(stripped_result)
+            response_list.append(stripped_result)
+
+            # Reverse the order of response_list
+            #response_list.reverse()
+
+        # Sort the data in descending order of timestamp (oldest to newest)
+        sorted_results = sorted(results, key=lambda x: x['timestamp'])
+        response_list = list(reversed(sorted_results))  # Reverse the sorted results
+
+
+        return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error querying the database")
 
 @app.get("/plan-trip-p2")
 def plan_trip_p2():

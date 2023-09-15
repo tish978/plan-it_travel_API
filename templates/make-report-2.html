@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Report Page</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @keyframes glowing {
+            0% {
+               box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+            }
+            50% {
+               box-shadow: 0 0 30px rgba(128, 0, 128, 1);
+            }
+            100% {
+               box-shadow: 0 0 15px rgba(128, 0, 128, 0.6);
+            }
+        }
+
+         @keyframes lavaLamp {
+            0%, 100% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+        }
+
+         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: greenyellow;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, purple, deeppink, rebeccapurple, firebrick);
+            background-size: 300% 300%;
+            animation: lavaLamp 5s infinite;
+        }
+
+        .glow-button{
+            background-color: rebeccapurple;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .glow-button:hover {
+            animation: glowing 2.5s infinite;
+            background-color: rebeccapurple;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div class="container">
+        <h2>Travel Survey</h2>
+        <form action="/make-report-2" method="post">
+            <button type="submit" class="btn btn-primary">Make Report!</button>
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+     <script>
+        const submitButton = document.getElementById('submitButton');
+
+        if (submitButton) {
+            submitButton.addEventListener('mouseover', () => {
+                // Add the glow-button class when the button is being hovered over
+                submitButton.classList.add('glow-button');
+            });
+
+            submitButton.addEventListener('mouseout', () => {
+                // Remove the glow-button class when the mouse moves out of the way of the button
+                submitButton.classList.remove('glow-button');
+            });
+        }
+
+        const body = document.body;
+
+        // Update background colors based on mouse position
+        document.addEventListener('mousemove', (event) => {
+            const mouseX = event.clientX / window.innerWidth * 50; // Normalize mouse position
+            const mouseY = event.clientY / window.innerHeight * 50;
+
+            body.style.backgroundImage = `radial-gradient(at ${mouseX}% ${mouseY}%, purple, deeppink, rebeccapurple, firebrick)`;
+        });
+
+    </script>
+</body>
+</html>
