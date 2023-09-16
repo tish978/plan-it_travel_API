@@ -52,6 +52,66 @@
     </style>
 </head>
 <body>
+<div class="container">
+    <h2>Here is your report of all your recommended destinations!</h2>
+    <div id="resultsContainer" class="card my-3">
+        <div class="card-body">
+            <table class="table table-bordered" id="destinationTable">
+                <thead>
+                <tr>
+                    <th>
+                        Location Name(s)
+                        <button id="sortLocation" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Country
+                        <button id="sortCountry" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Continent
+                        <button id="sortContinent" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Weather
+                        <button id="sortWeather" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Language
+                        <button id="sortLanguage" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Expensive
+                        <button id="sortExpensive" class="glow-button">Sort</button>
+                    </th>
+                    <th>
+                        Attractions
+                        <button id="sortAttractions" class="glow-button">Sort</button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>
+                        <ul>
+                            {% for location in result['locations_info'] %}
+                            <li> {{ location }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ result['timestamp'] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
     <div class="container">
         <h2>Here are your recommended destinations to visit!</h2>
         {% for result in results %}
@@ -100,6 +160,83 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         const submitButton = document.getElementById('submitButton');
+
+        // Function to sort the data by location (alphabetically)
+        const sortLocation = () => {
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[0].textContent;
+                const locationNameB = b.cells[0].textContent;
+
+                if (ascendingOrder){
+                    return locationNameA.localeCompare(locationNameB);
+                } else {
+                    return locationNameB.localeCompare(locationNameA);
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            })
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+        const sortCountry = () => {
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[1].textContent;
+                const locationNameB = b.cells[1].textContent;
+
+                if (ascendingOrder){
+                    return locationNameA.localeCompare(locationNameB);
+                } else {
+                    return locationNameB.localeCompare(locationNameA);
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            })
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+        const sortLocationButton = document.getElementById('sortLocation');
+        sortLocationButton.addEventListener('click', sortLocation);
+
+        const sortCountryButton = document.getElementById('sortCountry');
+        sortCountryButton.addEventListener('click', sortCountry);
+
+        const sortContinentButton = document.getElementById('sortContinent');
+        sortContinentButton.addEventListener('click', sortContinent);
+
+        const sortWeatherButton = document.getElementById('sortWeather');
+        sortWeatherButton.addEventListener('click', sortWeather);
+
+        const sortLanguageButton = document.getElementById('sortLanguage');
+        sortLanguageButton.addEventListener('click', sortLanguage);
+
+        const sortExpensiveButton = document.getElementById('sortExpensive');
+        sortExpensiveButton.addEventListener('click', sortExpensive);
+
+        const sortAttractionsButton = document.getElementById('sortAttractions');
+        sortAttractionsButton.addEventListener('click', sortAttractions);
+
 
 
         if (submitButton) {

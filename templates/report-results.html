@@ -52,20 +52,20 @@
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
     <h2>Here is your report of all your recommended destinations!</h2>
     <div id="resultsContainer" class="card my-3">
-        <div class="card-header">
-            Consolidated Destinations
-        </div>
         <div class="card-body">
             <table class="table table-bordered" id="destinationTable">
                 <thead>
                 <tr>
-                    <th>Location Name(s)</th>
+                    <th>
+                        Location Name(s)
+                        <button id="sortLocation" class="glow-button">Sort</button>
+                    </th>
                     <th>
                         Timestamp
-                        <button id="sortTimestamp" class="btn btn-link">Sort</button>
+                        <button id="sortTimestamp" class="glow-button">Sort</button>
                     </th>
                 </tr>
                 </thead>
@@ -121,8 +121,39 @@
         ascendingOrder = !ascendingOrder; // Toggle the sort order
     };
 
+    // Function to sort the data by location (alphabetically)
+    const sortLocation = () => {
+        const table = document.getElementById('destinationTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            const locationNameA = a.cells[0].textContent;
+            const locationNameB = b.cells[0].textContent;
+
+            if (ascendingOrder){
+                return locationNameA.localeCompare(locationNameB);
+            } else {
+                return locationNameB.localeCompare(locationNameA);
+            }
+        });
+
+        // Clear the table body
+        tbody.innerHTML = '';
+
+        // Append the sorted rows back to the table
+        rows.forEach(row => {
+            tbody.appendChild(row);
+        })
+
+        ascendingOrder = !ascendingOrder;   // toggle the sort order
+    };
+
     const sortTimestampButton = document.getElementById('sortTimestamp');
     sortTimestampButton.addEventListener('click', sortTimestamp);
+
+    const sortLocationButton = document.getElementById('sortLocation');
+    sortLocationButton.addEventListener('click', sortLocation);
 
 
     const body = document.body;
