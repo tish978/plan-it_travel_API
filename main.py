@@ -3,7 +3,9 @@ from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSON
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from bson import json_util, ObjectId
+from itertools import product
 import json, datetime, pytz
+
 
 from database import db
 
@@ -57,6 +59,38 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     # Debugging: Log constructed query
     print("Query:", query)
 
+    try:
+        # Create all possible combinations of selected values
+        combinations = list(product(q1, q2_int, q3))
+
+        # Store results for each combination
+        all_results = {}
+
+        for combo in combinations:
+            # Construct a query for the current combination
+            combo_query = {
+                "continent": combo[0],
+                "weather": combo[1],
+                "language": combo[2],
+            }
+
+            # Perform the query
+            results = list(collection.find(combo_query))
+
+            # Store results for the current combination
+            all_results[combo] = results
+
+            # Debugging: Log the results for the current combination
+            print(f"Results for combination {combo}:")
+            for result in results:
+                print(result)
+
+        # Here, you can use 'all_results' to access the results for each combination
+        # You can render or display these results as needed
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error querying the DB")
+
+
     # Perform query to create reports collection entry
     try:
         results = list(collection.find(query))
@@ -73,8 +107,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         reports_collection.insert_one(new_report)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
-
-
 
 
     # Perform the query for output on page
