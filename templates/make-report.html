@@ -52,11 +52,16 @@
         }
     </style>
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body class="bg-light d-flex flex-column justify-content-center align-items-center vh-100">
+
+    <form action="/home" method="post" class="position-absolute top-0 end-0 mt-2 me-2">
+        <button type="submit" class="w-100 glow-button mx-auto d-block" id="goBackButton">Previous Page</button>
+    </form>
+
     <div class="container">
         <h2>Travel Survey</h2>
         <form action="/make-report" method="post">
-            <button type="submit" class="w-100 glow-button">Make Report!</button>
+            <button type="submit" class="w-50 glow-button">Make Report!</button>
         </form>
     </div>
 

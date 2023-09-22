@@ -41,6 +41,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
 
     collection = database['destinations']
     reports_collection = database['reports']
+
     # Debugging: Log form input values
     print("q1:", q1)
     print("q2:", q2)
@@ -50,11 +51,15 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     q2_int = [int(value) for value in q2]
 
     # Build the MongoDB query based on the form input
-    query = {
-        "continent": {"$in": q1},
-        "weather": {"$in": q2_int},
-        "language": {"$in": q3},
-    }
+    query = {}
+
+    # Add conditions to the query based on the presence of each input
+    if q1:
+        query["continent"] = {"$in": q1}
+    if q2_int:
+        query["weather"] = {"$in": q2_int}
+    if q3:
+        query["language"] = {"$in": q3}
 
     # Debugging: Log constructed query
     print("Query:", query)
@@ -68,11 +73,14 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
 
         for combo in combinations:
             # Construct a query for the current combination
-            combo_query = {
-                "continent": combo[0],
-                "weather": combo[1],
-                "language": combo[2],
-            }
+            combo_query = {}
+
+            if combo[0]:
+                combo_query["continent"] = combo[0]
+            if combo[1]:
+                combo_query["weather"] = combo[1]
+            if combo[2]:
+                combo_query["language"] = combo[2]
 
             # Perform the query
             results = list(collection.find(combo_query))

@@ -52,7 +52,12 @@
         }
     </style>
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body class="bg-light d-flex flex-column justify-content-center align-items-center vh-100">
+
+    <form action="/home" method="post" class="position-absolute top-0 end-0 mt-2 me-2">
+        <button type="submit" class="w-100 glow-button mx-auto d-block" id="goBackButton">Previous Page</button>
+    </form>
+
     <div class="container">
         <h2>Travel Survey</h2>
         <form action="/query" method="post">
@@ -141,7 +146,8 @@
                 <label class="form-check-label" for="q3-option6">Hindi</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">Continue</button>
+            <button type="submit" class="w-50 glow-button mx-auto d-block" id="submitButton">Submit</button>
+
         </form>
     </div>
 
