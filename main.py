@@ -37,7 +37,7 @@ async def generate_report(request: Request):
 
 
 @app.post("/query", response_class=HTMLResponse)
-async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...)):
+async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...), q4: list = Form(...), q5: list = Form(...), q6: list = Form(...), q7: list = Form(...), q8: list = Form(...), q9: list = Form(...)):
 
     collection = database['destinations']
     reports_collection = database['reports']
@@ -46,9 +46,23 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     print("q1:", q1)
     print("q2:", q2)
     print("q3:", q3)
+    print("q4:", q4)
+    print("q5:", q5)
+    print("q6:", q6)
+    print("q7:", q7)
+    print("q8:", q8)
+    print("q9:", q9)
 
-    # Convert q2 to a list of integers
+    # Convert q2 (weather) and q4 (budget) to a list of integers
     q2_int = [int(value) for value in q2]
+    q4_int = [int(value) for value in q4]
+
+
+    # Convert q6-q9 to a list of bool
+    q6_bool = [bool(value) for value in q6]
+    q7_bool = [bool(value) for value in q7]
+    q8_bool = [bool(value) for value in q8]
+    q9_bool = [bool(value) for value in q9]
 
     # Build the MongoDB query based on the form input
     query = {}
@@ -60,13 +74,26 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         query["weather"] = {"$in": q2_int}
     if q3:
         query["language"] = {"$in": q3}
+    if q4_int:
+        query["budget"] = {"$in": q4_int}
+    if q5:
+        query["cuisine"] = {"$in": q5}
+    if q6_bool:
+        query["family_friendly"] = {"$in": q6_bool}
+    if q7_bool:
+        query["group_friendly"] = {"$in": q7_bool}
+    if q8_bool:
+        query["party_scene"] = {"$in": q8_bool}
+    if q9_bool:
+        query["romantic"] = {"$in": q9_bool}
+
 
     # Debugging: Log constructed query
     print("Query:", query)
 
     try:
         # Create all possible combinations of selected values
-        combinations = list(product(q1, q2_int, q3))
+        combinations = list(product(q1, q2_int, q3, q4_int, q5, q6_bool, q7_bool, q8_bool, q9_bool))
 
         # Store results for each combination
         all_results = {}
@@ -81,6 +108,18 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
                 combo_query["weather"] = combo[1]
             if combo[2]:
                 combo_query["language"] = combo[2]
+            if combo[3]:
+                combo_query["budget"] = combo[3]
+            if combo[4]:
+                combo_query["cuisine"] = combo[4]
+            if combo[5]:
+                combo_query["family_friendly"] = combo[5]
+            if combo[6]:
+                combo_query["group_friendly"] = combo[6]
+            if combo[7]:
+                combo_query["party_scene"] = combo[7]
+            if combo[8]:
+                combo_query["romantic"] = combo[8]
 
             # Perform the query
             results = list(collection.find(combo_query))

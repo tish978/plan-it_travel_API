@@ -31,10 +31,9 @@
             margin: 0;
             font-family: Arial, sans-serif;
             color: greenyellow;
-            overflow: hidden;
+            overflow: auto;
             position: relative;
             width: 100vw;
-            height: 100vh;
             background: linear-gradient(45deg, purple, deeppink, rebeccapurple, firebrick);
             background-size: 300% 300%;
             animation: lavaLamp 5s infinite;
@@ -52,99 +51,193 @@
         }
     </style>
 </head>
-<body class="bg-light d-flex flex-column justify-content-center align-items-center vh-100">
-
-    <form action="/home" method="post" class="position-absolute top-0 end-0 mt-2 me-2">
-        <button type="submit" class="w-100 glow-button mx-auto d-block" id="goBackButton">Previous Page</button>
-    </form>
-
+<body class="bg-light d-flex flex-column justify-content-center align-items-center">
     <div class="container">
-        <h2>Travel Survey</h2>
-        <form action="/query" method="post">
-            <!-- Question 1 -->
-            What continent are you considering traveling to? [Select all that apply]
-            <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option1" value="Asia">
-                <label class="form-check-label" for="q1-option1">Asia</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option2" value="North America">
-                <label class="form-check-label" for="q1-option2">North America</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option3" value="Antarctica">
-                <label class="form-check-label" for="q1-option3">Antarctica</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option4" value="Africa">
-                <label class="form-check-label" for="q1-option4">Africa</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option5" value="Europe">
-                <label class="form-check-label" for="q1-option5">Europe</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option6" value="Australia">
-                <label class="form-check-label" for="q1-option4">Australia</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q1" id="q1-option7" value="South America">
-                <label class="form-check-label" for="q1-option5">South America</label>
-            </div>
 
-            <!-- Question 2 -->
-            What weather average are you looking for during your time? [in Degrees F]
-            <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option1" value="83">
-                <label class="form-check-label" for="q2-option1">83</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option2" value="25">
-                <label class="form-check-label" for="q2-option2">25</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option3" value="50">
-                <label class="form-check-label" for="q2-option3">50</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option4" value="75">
-                <label class="form-check-label" for="q2-option4">75</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option5" value="100">
-                <label class="form-check-label" for="q2-option5">100</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q2" id="q2-option6" value="105">
-                <label class="form-check-label" for="q2-option6">105</label>
-            </div>
+        <form action="/home" method="post" class="position-absolute top-0 end-0 mt-2 me-2">
+            <button type="submit" class="w-100 glow-button mx-auto d-block" id="goBackButton">Previous Page</button>
+        </form>
 
-            <!-- Question 3 -->
-            What language(s) are you comfortable speaking during your trip?
-            <div class="form-group">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option1" value="English">
-                <label class="form-check-label" for="q3-option1">English</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option2" value="Spanish">
-                <label class="form-check-label" for="q3-option2">Spanish</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option3" value="French">
-                <label class="form-check-label" for="q3-option3">French</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option4" value="Japanese">
-                <label class="form-check-label" for="q3-option4">Japanese</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option5" value="Mandarin">
-                <label class="form-check-label" for="q3-option5">Mandarin</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="q3" id="q3-option6" value="Hindi">
-                <label class="form-check-label" for="q3-option6">Hindi</label>
-            </div>
+
+            <h2>Travel Survey</h2>
+            <form action="/query" method="post">
+                <!-- Question 1 -->
+                What continent are you considering traveling to? [Select all that apply]
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option1" value="Asia">
+                    <label class="form-check-label" for="q1-option1">Asia</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option2" value="North America">
+                    <label class="form-check-label" for="q1-option2">North America</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option3" value="Antarctica">
+                    <label class="form-check-label" for="q1-option3">Antarctica</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option4" value="Africa">
+                    <label class="form-check-label" for="q1-option4">Africa</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option5" value="Europe">
+                    <label class="form-check-label" for="q1-option5">Europe</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option6" value="Australia">
+                    <label class="form-check-label" for="q1-option4">Australia</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q1" id="q1-option7" value="South America">
+                    <label class="form-check-label" for="q1-option5">South America</label>
+                </div>
+
+                <!-- Question 2 -->
+                What weather average are you looking for during your time? [in Degrees F]
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option1" value="83">
+                    <label class="form-check-label" for="q2-option1">83</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option2" value="25">
+                    <label class="form-check-label" for="q2-option2">25</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option3" value="50">
+                    <label class="form-check-label" for="q2-option3">50</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option4" value="75">
+                    <label class="form-check-label" for="q2-option4">75</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option5" value="100">
+                    <label class="form-check-label" for="q2-option5">100</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q2" id="q2-option6" value="105">
+                    <label class="form-check-label" for="q2-option6">105</label>
+                </div>
+
+                <!-- Question 3 -->
+                What language(s) are you comfortable speaking during your trip?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option1" value="English">
+                    <label class="form-check-label" for="q3-option1">English</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option2" value="Spanish">
+                    <label class="form-check-label" for="q3-option2">Spanish</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option3" value="French">
+                    <label class="form-check-label" for="q3-option3">French</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option4" value="Japanese">
+                    <label class="form-check-label" for="q3-option4">Japanese</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option5" value="Mandarin">
+                    <label class="form-check-label" for="q3-option5">Mandarin</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q3" id="q3-option6" value="Hindi">
+                    <label class="form-check-label" for="q3-option6">Hindi</label>
+                </div>
+
+
+                <!-- Question 4 -->
+                What is your budget? (USD)
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option1" value="200">
+                    <label class="form-check-label" for="q4-option1">200</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option2" value="400">
+                    <label class="form-check-label" for="q4-option2">400</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option3" value="600">
+                    <label class="form-check-label" for="q4-option3">600</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option4" value="800">
+                    <label class="form-check-label" for="q4-option4">800</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option5" value="1000">
+                    <label class="form-check-label" for="q4-option5">1000</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q4" id="q4-option6" value="1200">
+                    <label class="form-check-label" for="q4-option6">1200</label>
+                </div>
+
+
+                <!-- Question 5 -->
+                What cuisine do you prefer?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q5" id="q5-option1" value="English">
+                    <label class="form-check-label" for="q5-option1">American</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q5" id="q5-option2" value="Spanish">
+                    <label class="form-check-label" for="q5-option2">Greek</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q5" id="q5-option3" value="French">
+                    <label class="form-check-label" for="q5-option3">Sushi</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q5" id="q5-option4" value="Japanese">
+                    <label class="form-check-label" for="q5-option4">Seafood</label>
+                </div>
+
+                <!-- Question 6 -->
+                Do you want a Family Friendly trip?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q6" id="q6-option1" value="Yes">
+                    <label class="form-check-label" for="q6-option1">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q6" id="q6-option2" value="No">
+                    <label class="form-check-label" for="q6-option2">No</label>
+                </div>
+
+                <!-- Question 7 -->
+                Do you want a Group Friendly trip?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q7" id="q7-option1" value="Yes">
+                    <label class="form-check-label" for="q7-option1">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q7" id="q7-option2" value="No">
+                    <label class="form-check-label" for="q7-option2">No</label>
+                </div>
+
+                <!-- Question 8 -->
+                Do you want a Party Scene?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q8" id="q8-option1" value="Yes">
+                    <label class="form-check-label" for="q8-option1">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q8" id="q8-option2" value="No">
+                    <label class="form-check-label" for="q8-option2">No</label>
+                </div>
+
+                <!-- Question 9 -->
+                Do you want a Romantic trip?
+                <div class="form-group">
+                    <input class="form-check-input" type="checkbox" name="q9" id="q9-option1" value="Yes">
+                    <label class="form-check-label" for="q9-option1">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="q9" id="q9-option2" value="No">
+                    <label class="form-check-label" for="q9-option2">No</label>
+                </div>
+
 
             <button type="submit" class="w-50 glow-button mx-auto d-block" id="submitButton">Submit</button>
 
