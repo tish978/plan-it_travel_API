@@ -87,6 +87,30 @@
                                 Attractions
                                 <button id="sortAttractions" class="glow-button">Sort</button>
                             </th>
+                            <th>
+                                Budget
+                                <button id="sortBudget" class="glow-button">Sort</button>
+                            </th>
+                            <th>
+                                Cuisine
+                                <button id="sortCuisine" class="glow-button">Sort</button>
+                            </th>
+                            <th>
+                                Family Friendly
+                                <button id="sortFamilyFriendly" class="glow-button">Sort</button>
+                            </th>
+                            <th>
+                                Group Friendly
+                                <button id="sortGroupFriendly" class="glow-button">Sort</button>
+                            </th>
+                            <th>
+                                Party Scene
+                                <button id="sortPartyScene" class="glow-button">Sort</button>
+                            </th>
+                            <th>
+                                Romantic
+                                <button id="sortRomantic" class="glow-button">Sort</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,6 +129,12 @@
                                     {% endfor %}
                                 </ul>
                             </td>
+                            <td>{{ result['budget'] }}</td>
+                            <td>{{ result['cuisine'] }}</td>
+                            <td>{{ result['family_friendly'] }}</td>
+                            <td>{{ result['group_friendly'] }}</td>
+                            <td>{{ result['party_scene'] }}</td>
+                            <td>{{ result['romantic'] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -123,7 +153,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
 
+        let ascendingOrder = true;
+
         const submitButton = document.getElementById('submitButton');
+
+        const body = document.body;
 
         if (submitButton) {
             submitButton.addEventListener('mouseover', () => {
@@ -137,7 +171,7 @@
             });
         }
 
-        const body = document.body;
+
 
         // Update background colors based on mouse position
         document.addEventListener('mousemove', (event) => {
@@ -147,9 +181,6 @@
             body.style.backgroundImage = `radial-gradient(at ${mouseX}% ${mouseY}%, purple, deeppink, rebeccapurple, firebrick)`;
         });
 
-        let ascendingOrder = true;
-
-        const submitButton = document.getElementById('submitButton');
 
         // Function to sort the data by location (alphabetically)
         const sortLocation = () => {
@@ -350,6 +381,181 @@
             ascendingOrder = !ascendingOrder;   // toggle the sort order
         };
 
+
+
+        const sortBudget = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const timestampA = a.cells[7].textContent;
+                const timestampB = b.cells[7].textContent;
+
+                if (ascendingOrder) {
+                    return timestampA - timestampB;
+                } else {
+                    return timestampB - timestampA;
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            })
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+
+        const sortCuisine = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[8].textContent;
+                const locationNameB = b.cells[8].textContent;
+
+                if (ascendingOrder){
+                    return locationNameA.localeCompare(locationNameB);
+                } else {
+                    return locationNameB.localeCompare(locationNameA);
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            })
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+
+        const sortFamilyFriendly = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[9].textContent;
+                const locationNameB = b.cells[9].textContent;
+
+                if (ascendingOrder) {
+                    return locationNameA.localeCompare(locationNameB); // Compare as strings
+                } else {
+                    return locationNameB.localeCompare(locationNameA); // Compare as strings
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+
+        const sortGroupFriendly = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[10].textContent;
+                const locationNameB = b.cells[10].textContent;
+
+                if (ascendingOrder) {
+                    return locationNameA.localeCompare(locationNameB); // Compare as strings
+                } else {
+                    return locationNameB.localeCompare(locationNameA); // Compare as strings
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+
+        const sortPartyScene = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[11].textContent;
+                const locationNameB = b.cells[11].textContent;
+
+                if (ascendingOrder) {
+                    return locationNameA.localeCompare(locationNameB); // Compare as strings
+                } else {
+                    return locationNameB.localeCompare(locationNameA); // Compare as strings
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+        const sortRomantic = () => {
+
+            const table = document.getElementById('destinationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const locationNameA = a.cells[12].textContent;
+                const locationNameB = b.cells[12].textContent;
+
+                if (ascendingOrder) {
+                    return locationNameA.localeCompare(locationNameB); // Compare as strings
+                } else {
+                    return locationNameB.localeCompare(locationNameA); // Compare as strings
+                }
+            });
+
+            // Clear the table body
+            tbody.innerHTML = '';
+
+            // Append the sorted rows back to the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+
+            ascendingOrder = !ascendingOrder;   // toggle the sort order
+        };
+
+
         const sortLocationButton = document.getElementById('sortLocation');
         sortLocationButton.addEventListener('click', sortLocation);
 
@@ -371,6 +577,23 @@
         const sortAttractionsButton = document.getElementById('sortAttractions');
         sortAttractionsButton.addEventListener('click', sortAttractions);
 
+        const sortBudgetButton = document.getElementById('sortBudget');
+        sortBudgetButton.addEventListener('click', sortBudget);
+
+        const sortCuisineButton = document.getElementById('sortCuisine');
+        sortCuisineButton.addEventListener('click', sortCuisine);
+
+        const sortFamilyFriendlyButton = document.getElementById('sortFamilyFriendly');
+        sortFamilyFriendlyButton.addEventListener('click', sortFamilyFriendly);
+
+        const sortGroupFriendlyButton = document.getElementById('sortGroupFriendly');
+        sortGroupFriendlyButton.addEventListener('click', sortGroupFriendly);
+
+        const sortPartySceneButton = document.getElementById('sortPartyScene');
+        sortPartySceneButton.addEventListener('click', sortPartyScene);
+
+        const sortRomanticButton = document.getElementById('sortRomantic');
+        sortRomanticButton.addEventListener('click', sortRomantic);
 
 
         if (submitButton) {
@@ -385,7 +608,6 @@
             });
         }
 
-        const body = document.body;
 
         // Update background colors based on mouse position
         document.addEventListener('mousemove', (event) => {
