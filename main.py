@@ -6,7 +6,6 @@ from bson import json_util, ObjectId
 from itertools import product
 import json, datetime, pytz
 
-
 from database import db
 
 app = FastAPI()
@@ -19,17 +18,21 @@ templates = Jinja2Templates(directory="templates")
 
 pst = pytz.timezone('US/Pacific')
 
+
 @app.get("/")
 async def root():
     return FileResponse("templates/login.html")
+
 
 @app.get("/plan-trip", response_class=HTMLResponse)
 async def plan_trip(request: Request):
     return templates.TemplateResponse("plan-trip.html", {"request": request})
 
+
 @app.get("/generate-report", response_class=HTMLResponse)
 async def generate_report(request: Request):
     return templates.TemplateResponse("make-report.html", {"request": request})
+
 
 @app.get("/generate-report-2", response_class=HTMLResponse)
 async def generate_report(request: Request):
@@ -37,8 +40,9 @@ async def generate_report(request: Request):
 
 
 @app.post("/query", response_class=HTMLResponse)
-async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...), q4: list = Form(...), q5: list = Form(...), q6: list = Form(...), q7: list = Form(...), q8: list = Form(...), q9: list = Form(...)):
-
+async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...),
+                             q4: list = Form(...), q5: list = Form(...), q6: list = Form(...), q7: list = Form(...),
+                             q8: list = Form(...), q9: list = Form(...)):
     collection = database['destinations']
     reports_collection = database['reports']
 
@@ -56,7 +60,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     # Convert q2 (weather) and q4 (budget) to a list of integers
     q2_int = [int(value) for value in q2]
     q4_int = [int(value) for value in q4]
-
 
     # Convert q6-q9 to a list of bool
     q6_bool = [bool(value) for value in q6]
@@ -86,7 +89,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         query["party_scene"] = {"$in": q8_bool}
     if q9_bool:
         query["romantic"] = {"$in": q9_bool}
-
 
     # Debugging: Log constructed query
     print("Query:", query)
@@ -137,7 +139,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the DB")
 
-
     # Perform query to create reports collection entry
     try:
         results = list(collection.find(query))
@@ -150,11 +151,10 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         # Create a new entry in the reports collection
         current_time_pst = datetime.datetime.now(pst)
         current_time_pst = current_time_pst.strftime('%Y-%m-%d %H:%M:%S')
-        new_report = {'user_id': curr_userID,'location_ids': location_ids, 'timestamp': current_time_pst}
+        new_report = {'user_id': curr_userID, 'location_ids': location_ids, 'timestamp': current_time_pst}
         reports_collection.insert_one(new_report)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
-
 
     # Perform the query for output on page
     try:
@@ -168,7 +168,6 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
-
 
 
 @app.post("/make-report")
@@ -220,6 +219,7 @@ async def make_report(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
+
 @app.post("/make-report-2")
 async def make_report_2(request: Request):
     reports_collection = database['reports']
@@ -266,20 +266,21 @@ async def make_report_2(request: Request):
             response_list.append(stripped_result)
 
             # Reverse the order of response_list
-            #response_list.reverse()
+            # response_list.reverse()
 
         # Sort the data in descending order of timestamp (oldest to newest)
         sorted_results = sorted(results, key=lambda x: x['timestamp'])
         response_list = list(reversed(sorted_results))  # Reverse the sorted results
 
-
         return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
+
 @app.get("/plan-trip-p2")
 def plan_trip_p2():
     return FileResponse("templates/plan-trip-p2.html")
+
 
 @app.get('/plan-trip-p3')
 def plan_trip_p3():
@@ -290,15 +291,26 @@ def plan_trip_p3():
 def home():
     return FileResponse("templates/home.html")
 
+
+@app.get("/about")
+def about():
+    return FileResponse("templates/about.html")
+
+
+@app.get("/contact")
+def contact():
+    return FileResponse("templates/contact.html")
+
+
 @app.get("/sign-up", response_class=HTMLResponse)
 async def sign_up(request: Request):
     return templates.TemplateResponse("sign-up.html", {"request": request})
 
 
-
 @app.get("/my_endpoint")
 def my_endpoint():
     return {"message": "Sign-out successful"}
+
 
 @app.post("/sign-up")
 async def handle_sign_up(request: Request):
