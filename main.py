@@ -326,7 +326,20 @@ async def handle_sign_up(request: Request):
 
     # Insert username and password into the collection
     collection.insert_one({"username": username, "password": password})
-    return {"message": "User registered successfully"}
+    print("message: User registered successfully")
+
+    collection = database['users']
+
+    existing_user = collection.find_one({"username": username, "password": password})
+    if existing_user:
+        global curr_userID
+        curr_userID = existing_user['_id']
+        print(f"The _id value of the curr_userID is: {curr_userID}")
+        print({"message": "Successful login!"})
+        return RedirectResponse(url="/home")
+    else:
+        print({"message": "ERROR: User not found."})
+        return HTMLResponse(content="Invalid user account.", status_code=401)
 
 
 @app.post("/login")
