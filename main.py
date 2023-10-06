@@ -3,8 +3,12 @@ from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSON
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from bson import json_util, ObjectId
+from pydantic import BaseModel, ValidationError
 from itertools import product
-import json, datetime, pytz
+import json, datetime, pytz, os, sendgrid
+from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient
+
 
 from database import db
 
@@ -18,6 +22,31 @@ templates = Jinja2Templates(directory="templates")
 
 pst = pytz.timezone('US/Pacific')
 
+# Sendgrid API from env vars
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+
+
+@app.post("/send_email")
+async def send_email(request: Request, name: str = Form(...), email: str = Form(...), message: str = Form(...)):
+    print("Received request to /send-email")
+    print("test!")
+
+    message = Mail(
+        from_email=email,
+        to_emails='satish.bisa@gmail.com',
+        subject=name,
+        html_content=message
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+        print("message: Email Sent!")
+        return RedirectResponse(url="/home")
+    except Exception as e:
+        print(e.message)
 
 @app.get("/")
 async def root():
@@ -288,6 +317,11 @@ def plan_trip_p3():
 
 
 @app.post("/home")
+def home():
+    return FileResponse("templates/home.html")
+
+
+@app.get("/getHome")
 def home():
     return FileResponse("templates/home.html")
 

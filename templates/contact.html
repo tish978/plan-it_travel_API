@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Contact</title>
+    <title>About</title>
 
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -19,7 +19,7 @@
         }
 
         function goHome(){
-            window.location.href = '/home';
+            window.location.href = '/getHome';
         }
 
         function goAbout(){
@@ -159,12 +159,25 @@
             margin: 0 auto;
         }
 
+        section h2 {
+            margin-top: 75px;
+        }
+
+        section h3 {
+            margin-top: 75px;
+        }
+
+        .contact-form {
+            width: 300px;
+            margin: 0 auto;
+        }
+
     </style>
 </head>
 <body>
      <!-- Bootstrap Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="#">Welcome!</a>
+        <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -190,8 +203,33 @@
 
     <div id="content">
         <h2>Contact</h2>
-        <p>This is your custom dashboard. You can add buttons, widgets, charts, and other components here to monitor and control your application.</p>
+
+        <section>
+             <p>My email is sbisa@csu.fullerton.edu</p>
+        </section>
     </div>
+
+     <div class="contact-form bg-white p-4 rounded shadow">
+         <h2 class="text-center mb-4">Contact Me</h2>
+         <form method="POST" action="/send_email">
+             <div class="form-group mb-3">
+                 <label for="name" class="form-label">Your Name:</label>
+                 <input type="text" id="name" name="name" class="form-control" required>
+             </div>
+
+             <div class="form-group mb-3">
+                <label for="email" class="form-label">Your Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="message" class="form-label">Message:</label>
+                <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <input type="submit" value="Send Email" class="w-100 glow-button">
+         </form>
+     </div>
 
 
     <!-- Add Bootstrap JS and jQuery -->
