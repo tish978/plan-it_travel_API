@@ -14,6 +14,14 @@ from database import db
 
 app = FastAPI()
 
+"""
+if __name__ == "__main__":
+    import uvicorn
+
+    # Run the FastAPI app using uvicorn
+    uvicorn.run(app, host='127.0.0.1', port=8000)
+"""
+
 # Mount the "static" directory as "/static" for serving static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
