@@ -14,14 +14,6 @@ from database import db
 
 app = FastAPI()
 
-"""
-if __name__ == "__main__":
-    import uvicorn
-
-    # Run the FastAPI app using uvicorn
-    uvicorn.run(app, host='127.0.0.1', port=8000)
-"""
-
 # Mount the "static" directory as "/static" for serving static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -364,7 +356,8 @@ async def handle_sign_up(request: Request):
     collection = database['users']
     existing_user = collection.find_one({"username": username})
     if existing_user:
-        return {"message": "Username already exists"}
+        #return {"message": "Username already exists"}
+        return templates.TemplateResponse("sign-up-error.html", {"request": request})
 
     # Insert username and password into the collection
     collection.insert_one({"username": username, "password": password})
