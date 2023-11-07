@@ -390,4 +390,5 @@ def login(request: Request, username: str = Form(...), password: str = Form(...)
         return RedirectResponse(url="/home")
     else:
         print({"message": "ERROR: Username or Password is not correct."})
-        return HTMLResponse(content="Invalid username or password", status_code=401)
+        #return HTMLResponse(content="Invalid username or password", status_code=401)
+        return templates.TemplateResponse("login-error.html", {"request": request})
