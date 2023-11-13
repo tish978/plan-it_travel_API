@@ -188,6 +188,9 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     # Perform the query for output on page
     try:
         results = list(collection.find(query))
+        print("Results: " + str(results))
+        if not results:
+            return templates.TemplateResponse("plan-trip-results-error.html", {"request": request})
 
         # Convert and return each individual result as separate JSON responses
         response_list = []
@@ -196,7 +199,8 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
             response_list.append(stripped_result)
         return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error querying the database")
+        #raise HTTPException(status_code=500, detail="Error querying the database")
+        return templates.TemplateResponse("plan-trip-results-error.html", {"request": request})
 
 
 @app.post("/make-report")
@@ -213,6 +217,9 @@ async def make_report(request: Request):
 
     try:
         results = list(reports_collection.find(query))
+        if not results:
+            return templates.TemplateResponse("make-report-error.html", {"request": request})
+
         response_list = []
 
         for result in results:
@@ -220,6 +227,10 @@ async def make_report(request: Request):
 
             # Extract location_ids from the result
             location_ids = stripped_result.get("location_ids", [])
+
+            # Skip entry if location_ids is empty
+            if not location_ids:
+                continue
 
             # Retrieve location_name for each location_id
             locations_info = []
