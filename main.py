@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -46,7 +47,9 @@ async def send_email(request: Request, name: str = Form(...), email: str = Form(
         print("message: Email Sent!")
         return RedirectResponse(url="/home")
     except Exception as e:
-        print(e.message)
+        logging.error(f"Error occurred: {str(e)}")
+        return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
+
 
 @app.get("/")
 async def root():
