@@ -120,7 +120,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
         query["romantic"] = {"$in": q9_bool}
 
     # Debugging: Log constructed query
-    print("Query:", query)
+    # print("Query:", query)
 
     try:
         # Create all possible combinations of selected values
