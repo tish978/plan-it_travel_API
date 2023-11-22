@@ -258,6 +258,12 @@ async def make_report(request: Request):
 def home():
     return FileResponse("templates/home.html")
 
+# Endpoint to get home from nav bar
+@app.get("/getHome")
+def home():
+    return FileResponse("templates/home.html")
+
+
 # Endpoint to get to About Page
 @app.get("/about")
 def about():
