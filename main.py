@@ -1,3 +1,5 @@
+# This File contains all the necessary server-side code for the application
+
 import logging
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
@@ -64,11 +66,6 @@ async def plan_trip(request: Request):
 @app.get("/generate-report", response_class=HTMLResponse)
 async def generate_report(request: Request):
     return templates.TemplateResponse("make-report.html", {"request": request})
-
-
-@app.get("/generate-report-2", response_class=HTMLResponse)
-async def generate_report(request: Request):
-    return templates.TemplateResponse("make-report-2.html", {"request": request})
 
 
 @app.post("/query", response_class=HTMLResponse)
@@ -318,16 +315,6 @@ async def make_report_2(request: Request):
         return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
-
-
-@app.get("/plan-trip-p2")
-def plan_trip_p2():
-    return FileResponse("templates/plan-trip-p2.html")
-
-
-@app.get('/plan-trip-p3')
-def plan_trip_p3():
-    return FileResponse("templates/plan-trip-p3.html")
 
 
 @app.post("/home")

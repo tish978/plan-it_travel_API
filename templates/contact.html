@@ -183,7 +183,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <!-- You can add more navbar links here -->
                 <li class="nav-item active">
                     <a class="nav-link" onclick="goHome()">Home</a>
                 </li>
@@ -200,15 +199,15 @@
         </div>
     </nav>
 
-
+     <!-- Contents of the actual Contact Page -->
     <div id="content">
         <h2>Contact</h2>
-
         <section>
              <p>My email is satish.bisa@gmail.com</p>
         </section>
     </div>
 
+     <!-- Form to fill to send email -->
      <div class="contact-form bg-white p-4 rounded shadow">
          <h2 class="text-center mb-4">Contact Me</h2>
          <form method="POST" action="/send_email">
@@ -216,17 +215,14 @@
                  <label for="name" class="form-label">Your Name:</label>
                  <input type="text" id="name" name="name" class="form-control" required>
              </div>
-
              <div class="form-group mb-3">
                 <label for="email" class="form-label">Your Email:</label>
                 <input type="email" id="email" name="email" class="form-control" required>
             </div>
-
             <div class="form-group mb-3">
                 <label for="message" class="form-label">Message:</label>
                 <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
             </div>
-
             <input type="submit" value="Send Email" class="w-100 glow-button">
          </form>
      </div>
@@ -237,7 +233,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         const submitButton = document.getElementById('submitButton');
-
 
         if (submitButton) {
             submitButton.addEventListener('mouseover', () => {
