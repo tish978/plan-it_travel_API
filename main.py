@@ -11,35 +11,38 @@ from itertools import product
 import json, datetime, pytz, os, sendgrid
 from sendgrid.helpers.mail import Mail
 from sendgrid import SendGridAPIClient
-
-
 from database import db
 
 app = FastAPI()
 
-# Mount the "static" directory as "/static" for serving static files
+# Mount the "static" directory as "/static" for serving static files (such as images)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Connect to database specified in database.py
 database = db['plan-it_travel']
+
+# Specify templates to be used for each HTML Web Page
 templates = Jinja2Templates(directory="templates")
 
+# Specify timezone for timestamps in Reports
 pst = pytz.timezone('US/Pacific')
 
 # Sendgrid API from env vars
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
-
+# Endpoint used for sending emails on Contact Page
 @app.post("/send_email")
 async def send_email(request: Request, name: str = Form(...), email: str = Form(...), message: str = Form(...)):
-    print("Received request to /send-email")
-    print("test!")
 
+    # Specify details for the email
     message = Mail(
         from_email=email,
         to_emails='satish.bisa@gmail.com',
         subject=name,
         html_content=message
     )
+
+    # Try to send message but throw exception if not
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
@@ -53,38 +56,31 @@ async def send_email(request: Request, name: str = Form(...), email: str = Form(
         return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
 
 
+# Endpoint to default to Login Page when opening application
 @app.get("/")
 async def root():
     return FileResponse("templates/login.html")
 
 
+# Endpoint to go to Plan Trip page
 @app.get("/plan-trip", response_class=HTMLResponse)
 async def plan_trip(request: Request):
     return templates.TemplateResponse("plan-trip.html", {"request": request})
 
 
+# Endpoint to go to Generate Reports page
 @app.get("/generate-report", response_class=HTMLResponse)
 async def generate_report(request: Request):
     return templates.TemplateResponse("make-report.html", {"request": request})
 
 
+# Endpoint to query the database based on the end user's Plan Trip Survey answers
 @app.post("/query", response_class=HTMLResponse)
 async def query_destinations(request: Request, q1: list = Form(...), q2: list = Form(...), q3: list = Form(...),
                              q4: list = Form(...), q5: list = Form(...), q6: list = Form(...), q7: list = Form(...),
                              q8: list = Form(...), q9: list = Form(...)):
     collection = database['destinations']
     reports_collection = database['reports']
-
-    # Debugging: Log form input values
-    print("q1:", q1)
-    print("q2:", q2)
-    print("q3:", q3)
-    print("q4:", q4)
-    print("q5:", q5)
-    print("q6:", q6)
-    print("q7:", q7)
-    print("q8:", q8)
-    print("q9:", q9)
 
     # Convert q2 (weather) and q4 (budget) to a list of integers
     q2_int = [int(value) for value in q2]
@@ -119,9 +115,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     if q9_bool:
         query["romantic"] = {"$in": q9_bool}
 
-    # Debugging: Log constructed query
-    # print("Query:", query)
-
+    # Try to query on each combination of Survey input to find the proper matching destinations in the DB
     try:
         # Create all possible combinations of selected values
         combinations = list(product(q1, q2_int, q3, q4_int, q5, q6_bool, q7_bool, q8_bool, q9_bool))
@@ -163,19 +157,22 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
             for result in results:
                 print(result)
 
-        # Here, you can use 'all_results' to access the results for each combination
-        # You can render or display these results as needed
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the DB")
 
-    # Perform query to create reports collection entry
+    # Try to perform query to create Reports collection entry in DB (a report needs to be made based on the recommended
+    # destinations from this current Survey input, so that it can be used for when the end user wants to
+    # Generate Reports in the future)
     try:
         results = list(collection.find(query))
-        location_ids = []  # List to store _ids
+        # List to store _ids
+        location_ids = []
         for result in results:
-            _id = result.pop('_id', None)  # Remove the _id field from the result dictionary
+            # Remove the _id field from the result dictionary
+            _id = result.pop('_id', None)
             if _id:
-                location_ids.append(str(_id))  # Convert ObjectId to string and store in the list
+                # Convert ObjectId to string and store in the list
+                location_ids.append(str(_id))
 
         # Create a new entry in the reports collection
         current_time_pst = datetime.datetime.now(pst)
@@ -185,7 +182,7 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error querying the database")
 
-    # Perform the query for output on page
+    # Try to perform the query for output on Plan Trip Results page
     try:
         results = list(collection.find(query))
         print("Results: " + str(results))
@@ -199,24 +196,26 @@ async def query_destinations(request: Request, q1: list = Form(...), q2: list = 
             response_list.append(stripped_result)
         return templates.TemplateResponse("plan-trip-results.html", {"request": request, "results": response_list})
     except Exception as e:
-        #raise HTTPException(status_code=500, detail="Error querying the database")
         return templates.TemplateResponse("plan-trip-results-error.html", {"request": request})
 
 
+# Endpoint for Generate Report Functionality
 @app.post("/make-report")
 async def make_report(request: Request):
     reports_collection = database['reports']
     destination_collection = database['destinations']
 
+    # Use the current user's ID to query for the current user's reports in the DB
     query = {
         "user_id": curr_userID
     }
 
-    # Debugging: Log constructed query
-    print("Query:", query)
-
+    # Try to find all the reports related to the current user's ID, and print
+    # them onto Reports Results page, and throw exception if not
     try:
         results = list(reports_collection.find(query))
+
+        # Throw error if user has not taken a Plan Trip Survey yet
         if not results:
             return templates.TemplateResponse("make-report-error.html", {"request": request})
 
@@ -225,14 +224,14 @@ async def make_report(request: Request):
         for result in results:
             stripped_result = json.loads(json_util.dumps(result))
 
-            # Extract location_ids from the result
+            # Extract location_ids from the result because it's an unnecessary detail to show the end user
             location_ids = stripped_result.get("location_ids", [])
 
             # Skip entry if location_ids is empty
             if not location_ids:
                 continue
 
-            # Retrieve location_name for each location_id
+            # Retrieve location_name for each location_id because that's what we want to show the end user
             locations_info = []
             location_ids_oid = [ObjectId(location_id) for location_id in location_ids]
 
@@ -241,18 +240,12 @@ async def make_report(request: Request):
                     "_id": location_id
                 }
 
-                print("location_query: ", location_query)
-
                 location_name_results = list(destination_collection.find(location_query))
                 location_name = [result['location_name'] for result in location_name_results]
-
                 location_name_str = ", ".join([str(item) for item in location_name])
-
-                print("location: " + str(location_name_str))
                 locations_info.append(str(location_name_str))
 
             stripped_result["locations_info"] = locations_info
-            print(stripped_result)
             response_list.append(stripped_result)
 
         return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
@@ -260,93 +253,28 @@ async def make_report(request: Request):
         raise HTTPException(status_code=500, detail="Error querying the database")
 
 
-@app.post("/make-report-2")
-async def make_report_2(request: Request):
-    reports_collection = database['reports']
-    destination_collection = database['destinations']
-
-    query = {
-        "user_id": curr_userID
-    }
-
-    # Debugging: Log constructed query
-    print("Query:", query)
-
-    try:
-        results = list(reports_collection.find(query))
-        response_list = []
-
-        for result in results:
-            stripped_result = json.loads(json_util.dumps(result))
-
-            # Extract location_ids from the result
-            location_ids = stripped_result.get("location_ids", [])
-
-            # Retrieve location_name for each location_id
-            locations_info = []
-            location_ids_oid = [ObjectId(location_id) for location_id in location_ids]
-
-            for location_id in location_ids_oid:
-                location_query = {
-                    "_id": location_id
-                }
-
-                print("location_query: ", location_query)
-
-                location_name_results = list(destination_collection.find(location_query))
-                location_name = [result['location_name'] for result in location_name_results]
-
-                location_name_str = ", ".join([str(item) for item in location_name])
-
-                print("location: " + str(location_name_str))
-                locations_info.append(str(location_name_str))
-
-            stripped_result["locations_info"] = locations_info
-            print(stripped_result)
-            response_list.append(stripped_result)
-
-            # Reverse the order of response_list
-            # response_list.reverse()
-
-        # Sort the data in descending order of timestamp (oldest to newest)
-        sorted_results = sorted(results, key=lambda x: x['timestamp'])
-        response_list = list(reversed(sorted_results))  # Reverse the sorted results
-
-        return templates.TemplateResponse("report-results.html", {"request": request, "results": response_list})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error querying the database")
-
-
+# Endpoint to return/get to Home Page
 @app.post("/home")
 def home():
     return FileResponse("templates/home.html")
 
-
-@app.get("/getHome")
-def home():
-    return FileResponse("templates/home.html")
-
-
+# Endpoint to get to About Page
 @app.get("/about")
 def about():
     return FileResponse("templates/about.html")
 
-
+# Endpoint to get to Contact Page
 @app.get("/contact")
 def contact():
     return FileResponse("templates/contact.html")
 
-
+# Endpoint to get to Sign Up page
 @app.get("/sign-up", response_class=HTMLResponse)
 async def sign_up(request: Request):
     return templates.TemplateResponse("sign-up.html", {"request": request})
 
 
-@app.get("/my_endpoint")
-def my_endpoint():
-    return {"message": "Sign-out successful"}
-
-
+# Endpoint to perform the Sign Up functionality
 @app.post("/sign-up")
 async def handle_sign_up(request: Request):
     form_data = await request.form()
@@ -357,16 +285,16 @@ async def handle_sign_up(request: Request):
     collection = database['users']
     existing_user = collection.find_one({"username": username})
     if existing_user:
-        #return {"message": "Username already exists"}
         return templates.TemplateResponse("sign-up-error.html", {"request": request})
 
-    # Insert username and password into the collection
+    # Insert username and password into the users collection
     collection.insert_one({"username": username, "password": password})
     print("message: User registered successfully")
 
     collection = database['users']
 
     existing_user = collection.find_one({"username": username, "password": password})
+
     if existing_user:
         global curr_userID
         curr_userID = existing_user['_id']
@@ -378,6 +306,7 @@ async def handle_sign_up(request: Request):
         return HTMLResponse(content="Invalid user account.", status_code=401)
 
 
+# Endpoint to perform Login functionality
 @app.post("/login")
 def login(request: Request, username: str = Form(...), password: str = Form(...)):
     collection = database['users']
@@ -391,5 +320,4 @@ def login(request: Request, username: str = Form(...), password: str = Form(...)
         return RedirectResponse(url="/home")
     else:
         print({"message": "ERROR: Username or Password is not correct."})
-        #return HTMLResponse(content="Invalid username or password", status_code=401)
         return templates.TemplateResponse("login-error.html", {"request": request})

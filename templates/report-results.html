@@ -53,6 +53,8 @@
 </head>
 <body>
 <div class="container">
+
+    <!-- Content of Report -->
     <h2>Here is your report of all your recommended destinations!</h2>
     <div id="resultsContainer" class="card my-3">
         <div class="card-body">
@@ -87,6 +89,7 @@
         </div>
     </div>
 
+    <!-- Continue Button -->
     <div class="container">
         <form action="/home" method="post">
             <button type="submit" class="w-50 glow-button mx-auto d-block" id="submitButton">Continue</button>
@@ -94,11 +97,15 @@
     </div>
 
 </div>
+
 <!-- Add Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     let ascendingOrder = false;
+
+    // Below is the code to sort columns
+
 
     // Function to sort the data by timestamp
     const sortTimestamp = () => {
